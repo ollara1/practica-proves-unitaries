@@ -1,12 +1,20 @@
 package kiosk;
 
+import data.IrisScan;
+
 public class ActivationCard {
 
     private boolean active = true;
     private String code;
+    private IrisScan irisScan;
 
     public ActivationCard(String code) {
         this.code = code;
+    }
+
+    public ActivationCard(String code, IrisScan irisScan) {
+        this.code = code;
+        this.irisScan = irisScan;
     }
 
     public String getCode() {
