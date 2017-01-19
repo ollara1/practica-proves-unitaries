@@ -275,4 +275,26 @@ public class VotingMachineTest {
         vm.activateEmission(ac);
         Assert.assertTrue(vm.canVote());
     }
+
+    @Test
+    public void testCanActiveIrisFail() {
+        VotingMachine vm = new VotingMachine();
+        vm.setValidationService(new ValidationService() {
+            @Override
+            public boolean validate(ActivationCard card) {
+                return card.isActive();
+            }
+
+            @Override
+            public void deactivate(ActivationCard card) {
+                card.erase();
+            }
+        });
+        vm.setIrisScanner(() -> new IrisScan("notLmao".getBytes()));
+
+        Assert.assertFalse(vm.canVote());
+        ActivationCard ac = new ActivationCard("ayyLmao", new IrisScan("lmao".getBytes()));
+        vm.activateEmission(ac);
+        Assert.assertFalse(vm.canVote());
+    }
 }
