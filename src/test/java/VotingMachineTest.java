@@ -122,4 +122,41 @@ public class VotingMachineTest {
                 vote
         );
     }
+
+    @Test(expected = IllegalStateException.class)
+    public void testVoteFail() {
+        VotingMachine vm = new VotingMachine();
+        vm.setValidationService(new ValidationService() {
+            @Override
+            public boolean validate(ActivationCard card) {
+                return card.isActive();
+            }
+
+            @Override
+            public void deactivate(ActivationCard card) {
+                card.erase();
+            }
+        });
+        VotesDB vdb = new VotesDB() {
+            private List<Vote> innerList = new LinkedList<Vote>();
+
+            @Override
+            public void registerVote(Vote vote) {
+                this.innerList.add(vote);
+            }
+
+            @Override
+            public List<Vote> getVotes() {
+                return this.innerList;
+            }
+        };
+        vm.setVotesDB(vdb);
+        vm.setVotePrinter(vote -> System.out.println(vote.toString()));
+
+        Assert.assertFalse(vm.canVote());
+        ActivationCard ac = new ActivationCard("ayyLmao");
+
+        Vote vote = new Vote("ayyLmaoVote");
+        vm.vote(vote);
+    }
 }
