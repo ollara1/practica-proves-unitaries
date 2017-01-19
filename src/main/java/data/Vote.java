@@ -1,9 +1,7 @@
 package data;
 
-/**
- * Represents a vote.
- */
 final public class Vote {
+
     private final String option;
 
     public Vote(String option) {
@@ -16,9 +14,10 @@ final public class Vote {
 
     @Override
     public String toString() {
-        return "Vote{" +
-                "option='" + option + '\'' +
-                '}';
+        return "Vote{"
+                + "option='"
+                + option
+                + "'}";
     }
 
     @Override
