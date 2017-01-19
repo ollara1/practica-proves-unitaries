@@ -21,6 +21,10 @@ public class ActivationCard {
         return code;
     }
 
+    public IrisScan getIrisScan() {
+        return irisScan;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

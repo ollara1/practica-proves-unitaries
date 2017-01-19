@@ -1,6 +1,7 @@
 package kiosk;
 
 
+import data.IrisScan;
 import data.MailAddress;
 import data.Signature;
 import data.Vote;
@@ -17,6 +18,7 @@ public class VotingMachine {
     private VotesDB votesDB;
     private SignatureService signatureService;
     private MailerService mailerService;
+    private IrisScanner irisScanner;
     private boolean exist;
 
     private ActivationCard activeCard = null;
@@ -49,6 +51,9 @@ public class VotingMachine {
         this.mailerService = mailerService;
     }
 
+    public void setIrisScanner(IrisScanner irisScanner) {
+        this.irisScanner = irisScanner;
+    }
 
     public void activateEmission(ActivationCard card) throws IllegalStateException {
 
@@ -59,6 +64,13 @@ public class VotingMachine {
                 this.exist = true;//creamos la maquina
                 this.activeCard = card;
                 this.activeVote = null;
+                if (card.getIrisScan() != null) {
+                    IrisScan irisScan = this.irisScanner.scan();
+                    if (!irisScan.equals(card.getIrisScan())) {
+                        this.exist = false;
+                        this.activeCard = null;
+                    }
+                }
             }
         }
 
