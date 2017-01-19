@@ -51,4 +51,26 @@ public class VotingMachineTest {
         vm.activateEmission(ac);
         Assert.assertFalse(vm.canVote());
     }
+
+    @Test(expected = IllegalStateException.class)
+    public void activeThrowsExcepion() {
+        VotingMachine vm = new VotingMachine();
+        vm.setValidationService(new ValidationService() {
+            @Override
+            public boolean validate(ActivationCard card) {
+                return card.isActive();
+            }
+
+            @Override
+            public void deactivate(ActivationCard card) {
+                card.erase();
+            }
+        });
+
+        Assert.assertFalse(vm.canVote());
+        ActivationCard ac = new ActivationCard("ayyLmao");
+        vm.activateEmission(ac);
+        Assert.assertTrue(vm.canVote());
+        vm.activateEmission(new ActivationCard("cualsevol"));
+    }
 }
