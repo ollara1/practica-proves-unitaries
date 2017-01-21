@@ -13,9 +13,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by Ollara on 19/01/2017.
- */
+
 public class VotingMachineTest {
 
     @Test
