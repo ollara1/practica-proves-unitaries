@@ -36,7 +36,7 @@ public class ActivationCard {
     @Override
     public int hashCode() {
         return code.hashCode();
-    }//preguntar raul
+    }
 
     public boolean isActive() {
         return this.active;
