@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-
 public class VotingMachineTest {
 
     @Test
@@ -294,5 +293,47 @@ public class VotingMachineTest {
         ActivationCard ac = new ActivationCard("ayyLmao", new IrisScan("lmao".getBytes()));
         vm.activateEmission(ac);
         Assert.assertFalse(vm.canVote());
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testDualVoteFail() {
+        VotingMachine vm = new VotingMachine();
+        vm.setValidationService(new ValidationService() {
+            @Override
+            public boolean validate(ActivationCard card) {
+                return card.isActive();
+            }
+
+            @Override
+            public void deactivate(ActivationCard card) {
+                card.erase();
+            }
+        });
+        VotesDB vdb = new VotesDB() {
+            private List<Vote> innerList = new LinkedList<Vote>();
+
+            @Override
+            public void registerVote(Vote vote) {
+                this.innerList.add(vote);
+            }
+
+            @Override
+            public List<Vote> getVotes() {
+                return this.innerList;
+            }
+        };
+        vm.setVotesDB(vdb);
+        vm.setVotePrinter(vote -> System.out.println(vote.toString()));
+
+        Assert.assertFalse(vm.canVote());
+        ActivationCard ac = new ActivationCard("ayyLmao");
+        vm.activateEmission(ac);
+        Assert.assertTrue(vm.canVote());
+
+        Vote vote = new Vote("ayyLmaoVote");
+        vm.vote(vote);
+        Vote vote2 = new Vote("ayyLmaoVote");
+        vm.vote(vote2);
+
     }
 }
