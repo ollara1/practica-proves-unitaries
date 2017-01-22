@@ -57,10 +57,10 @@ public class VotingMachine {
 
     public void activateEmission(ActivationCard card) throws IllegalStateException {
 
-        if (exist == true) {//miramos si esta creada la maquina
+        if (exist == true) {
             throw new IllegalStateException();
         } else {
-            if (validationService.validate(card) == true) {//miramos si esta activada
+            if (validationService.validate(card) == true) {
                 this.exist = true;//creamos la maquina
                 this.activeCard = card;
                 this.activeVote = null;
